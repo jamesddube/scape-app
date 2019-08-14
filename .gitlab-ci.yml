@@ -19,7 +19,7 @@ gradle-build:
   script: "gradle build"
   artifacts:
     paths:
-      - build/libs/*.jar
+      - scape-core-service/build/libs/*.jar
 
 docker-build:
   stage: package
