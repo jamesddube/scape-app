@@ -26,6 +26,7 @@ docker-build:
   only:
     - master
   script:
-    - docker build -t $CI_REGISTRY_IMAGE .
+    - cd scape-core-service
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE

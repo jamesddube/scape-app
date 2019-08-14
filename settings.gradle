@@ -1,1 +1,8 @@
 rootProject.name = "scape-app"
+
+include 'scape-utils'
+include 'scape-core-service'
+include 'scape-subject-service'
+include 'scape-core-service'
+include 'scape-degree-service'
+
