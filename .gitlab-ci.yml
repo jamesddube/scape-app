@@ -30,6 +30,6 @@ docker-build:
     - cd scape-core-service
     - docker build -t $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
-    - cd scape-subject-service
+    - cd ../scape-subject-service
     - docker build -t $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
