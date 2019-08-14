@@ -20,6 +20,7 @@ gradle-build:
   artifacts:
     paths:
       - scape-core-service/build/libs/*.jar
+      - scape-subject-service/build/libs/*.jar
 
 docker-build:
   stage: package
@@ -27,6 +28,8 @@ docker-build:
     - master
   script:
     - cd scape-core-service
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker build -t $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - cd scape-subject-service
+    - docker build -t $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
