@@ -1,0 +1,50 @@
+image: docker:dind
+services:
+  - docker:dind
+
+variables:
+  SPRING_PROFILES_ACTIVE: gitlab-ci
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+  - package
+  - deploy
+  - review
+
+gradle-build:
+  image: gradle:jdk8
+  stage: build
+  only:
+    - master
+    - development
+  script: "gradle build -x test"
+  artifacts:
+    paths:
+      - scape-core-service/build/libs/*.jar
+      - scape-subject-service/build/libs/*.jar
+
+docker-build:
+  stage: package
+  only:
+    - master
+    - development
+  script:
+    - cd scape-core-service
+    - docker build -t $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA
+    - cd ../scape-subject-service
+    - docker build -t $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA
+
+review:
+  stage: review
+  script:
+    - docker run -d -p 4000:4000 $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker run -d -p 4001:4001 $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+    url: http://localhost:4000
+  when: manual
+  only:
+    - branches

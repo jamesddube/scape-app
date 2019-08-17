@@ -3,3 +3,7 @@
 gradle/
 gradlew
 gradlew.bat
+*iml
+build/
+out/
+lombok.config
