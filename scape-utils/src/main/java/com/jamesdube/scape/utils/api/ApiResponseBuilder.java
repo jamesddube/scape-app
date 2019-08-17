@@ -36,7 +36,7 @@ public class ApiResponseBuilder<R> {
         return this;
     }
 
-    public ApiResponse build(){
+    public ApiResponse<R> build(){
         ApiResponse<R> apiResponse = new ApiResponse<>();
         apiResponse.setStatusCode(statusCode);
         apiResponse.setSuccess(success);
