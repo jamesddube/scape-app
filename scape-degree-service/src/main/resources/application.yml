@@ -1,2 +1,11 @@
 server:
   port: 4002
+
+spring:
+  application:
+    name: degree-service
+  zipkin:
+    base-url: http://10.0.0.1:9411/
+  sleuth:
+    sampler:
+      probability: 1

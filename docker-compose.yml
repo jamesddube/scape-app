@@ -1,0 +1,27 @@
+version: '3.1'
+services:
+
+  database:
+    container_name: scape-mysql.lo
+    image: 'mysql:5.6'
+    ports:
+      - '30010:3306'
+    volumes:
+      - '/app-data/scape/mysql:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  scape-core:
+    image: '10.0.0.1:5000/jdube/scape-core-service:d638a1f3'
+    environment:
+      scape.sevice.degree.url: 'http://scape.lo/api/v1/degrees'
+      scape.sevice.subject.url: 'http://scape.lo/api/v1/subjects'
+    depends_on:
+        - database
+
+  scape-subject:
+    image: '10.0.0.1:5000/jdube/scape-degree-service:d638a1f3'
+    environment:
+      scape.sevice.degree.url: 'http://scape.lo/api/v1/degrees'
+      scape.sevice.subject.url: 'http://scape.lo/api/v1/subjects'
+

@@ -4,6 +4,15 @@ server:
 scape:
   service:
     subject:
-      url: http://localhost:4001/api/v1/subjects
+      url: http://10.0.0.1:4001/api/v1/subjects
     degree:
-      url: http://localhost:4002/api/v1/degrees
+      url: http://10.0.0.1:4002/api/v1/degrees
+
+spring:
+  application:
+    name: core-service
+  zipkin:
+    base-url: http://10.0.0.1:9411/
+  sleuth:
+    sampler:
+      probability: 1

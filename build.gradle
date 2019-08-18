@@ -30,7 +30,19 @@ configure(subprojects.findAll {it.name != 'scape-utils'}) {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
+
+    def cloudSleuthVersion = "2.1.2.RELEASE"
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-sleuth:${cloudSleuthVersion}"
+        }
+    }
+
     dependencies {
+
+        implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+        implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
 
