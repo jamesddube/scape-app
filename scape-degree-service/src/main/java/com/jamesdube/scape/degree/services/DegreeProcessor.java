@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface DegreeProcessor {
-    public ResponseEntity<ApiResponse<List<Degree>>> search(DegreeWrapper subjectWrapper);
+
+    ResponseEntity<ApiResponse<List<Degree>>> search(DegreeWrapper subjectWrapper);
+
+    ResponseEntity<ApiResponse<Degree>> findById(Long id);
 
 }

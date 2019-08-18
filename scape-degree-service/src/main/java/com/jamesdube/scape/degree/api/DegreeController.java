@@ -8,10 +8,7 @@ import com.jamesdube.scape.utils.enums.Classification;
 import com.jamesdube.scape.utils.enums.SubjectLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,5 +50,10 @@ public class DegreeController {
 
         return toObject(hashMap,DegreeWrapper.class);
 
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ApiResponse<Degree>> find(@PathVariable Long id){
+        return degreeProcessor.findById(id);
     }
 }

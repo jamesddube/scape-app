@@ -6,12 +6,14 @@ import com.jamesdube.scape.core.data.request.EnquirySubject;
 import com.jamesdube.scape.core.data.response.EnquiryResponse;
 import com.jamesdube.scape.core.processors.contract.EnquiryProcessor;
 import com.jamesdube.scape.core.services.contract.ClassificationService;
+import com.jamesdube.scape.core.services.contract.CoreService;
 import com.jamesdube.scape.core.services.contract.PointsService;
 import com.jamesdube.scape.core.services.implementation.EnquirySubjectValidator;
 import com.jamesdube.scape.core.services.implementation.Validator;
 import com.jamesdube.scape.utils.api.ApiResponse;
 import com.jamesdube.scape.utils.api.ApiResponseBuilder;
 import com.jamesdube.scape.utils.enums.SubjectGrade;
+import com.jamesdube.scape.utils.exception.ServiceNotAvailableException;
 import com.jamesdube.scape.utils.exception.SubjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 
@@ -20,16 +22,13 @@ import java.util.stream.Collectors;
 
 public class EnquiryProcessorImpl implements EnquiryProcessor {
 
-    private PointsService pointsService;
-
-    private ClassificationService classificationService;
+    private CoreService coreService;
 
     private EnquirySubjectValidator enquirySubjectValidator;
 
-    public EnquiryProcessorImpl(PointsService pointsService, ClassificationService classificationService,
+    public EnquiryProcessorImpl(CoreService coreService,
                                 EnquirySubjectValidator enquirySubjectValidator) {
-        this.pointsService = pointsService;
-        this.classificationService = classificationService;
+        this.coreService = coreService;
         this.enquirySubjectValidator = enquirySubjectValidator;
     }
 
@@ -47,15 +46,19 @@ public class EnquiryProcessorImpl implements EnquiryProcessor {
                     .build());
         }
 
-
-
-        List<SubjectGrade> subjectGradeList = enquiryRequest.getSubjectList().stream()
-                .map(EnquirySubject::getGrade).collect(Collectors.toList());
-
-        enquiryResponse.setPoints(pointsService.calculatePoints(subjectGradeList));
         try {
-            enquiryResponse.setClassification(classificationService.calculate(enquiryRequest.getSubjectList()));
-        }catch (SubjectNotFoundException e){
+            enquiryResponse = coreService.process(enquiryRequest);
+            apiResponseBuilder
+                    .success(true)
+                    .statusCode(200)
+                    .message("enquiry successful")
+                    .data("enquiryResponse",enquiryResponse)
+                    .build();
+
+            return ResponseEntity.status(apiResponseBuilder.build().getStatusCode()).body(apiResponseBuilder.build());
+        }
+        catch (ServiceNotAvailableException | SubjectNotFoundException e){
+
             return ResponseEntity.status(422).body(apiResponseBuilder
                     .success(false)
                     .statusCode(422)
@@ -63,13 +66,6 @@ public class EnquiryProcessorImpl implements EnquiryProcessor {
                     .build());
         }
 
-        apiResponseBuilder
-                .success(true)
-                .statusCode(200)
-                .message("enquiry successful")
-                .data("enquiryResponse",enquiryResponse)
-                .build();
 
-        return ResponseEntity.status(apiResponseBuilder.build().getStatusCode()).body(apiResponseBuilder.build());
     }
 }

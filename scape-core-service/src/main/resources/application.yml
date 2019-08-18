@@ -5,3 +5,5 @@ scape:
   service:
     subject:
       url: http://localhost:4001/api/v1/subjects
+    degree:
+      url: http://localhost:4002/api/v1/degrees

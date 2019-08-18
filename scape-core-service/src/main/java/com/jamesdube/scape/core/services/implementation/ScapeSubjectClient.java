@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamesdube.scape.core.data.Subject;
 import com.jamesdube.scape.core.services.contract.SubjectService;
 import com.jamesdube.scape.utils.api.ApiResponse;
+import com.jamesdube.scape.utils.exception.ServiceNotAvailableException;
 import com.jamesdube.scape.utils.exception.SubjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,6 +36,7 @@ public class ScapeSubjectClient implements SubjectService {
     @Override
     public Subject findByCode(String code) {
 
+        try{
         ApiResponse<List<Subject>> response = restTemplate.exchange(scapeSubjectServiceUrl + "?code=" + code,
                 HttpMethod.GET,
                 null,
@@ -53,6 +55,11 @@ public class ScapeSubjectClient implements SubjectService {
         }
 
         throw new RuntimeException("Response is null");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new ServiceNotAvailableException("Failed to connect to Scape Subject service");
+        }
 
     }
 }

@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-import static com.jamesdube.scape.utils.enums.Classification.ARTS;
-import static com.jamesdube.scape.utils.enums.Classification.SCIENCES;
+import static com.jamesdube.scape.utils.enums.Classification.*;
 
 @Slf4j
 @Component
@@ -24,9 +23,19 @@ public class Boot implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
         degreeRepository.saveAll(Arrays.asList(
                 new Degree("HCS","Computer Science",SCIENCES),
                 new Degree("HINFO","Information Systems",SCIENCES),
+                new Degree("HTEL","Telecommunications",SCIENCES),
+                new Degree("HACC","Accounting",COMMERCIALS),
+                new Degree("HBUS","Business Studies",COMMERCIALS),
+                new Degree("HECO","Economics",SCIENCES),
+                new Degree("HENG","English And Communication",ARTS),
+                new Degree("HMUS","Musicology",ARTS),
+                new Degree("HHST","History",ARTS),
+                new Degree("HRM","Human Resources",ARTS),
+                new Degree("HMKT","Marketing",COMMERCIALS),
                 new Degree("BA","Bachelor Of Arts",ARTS)
         ));
 
