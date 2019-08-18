@@ -23,6 +23,7 @@ gradle-build:
     paths:
       - scape-core-service/build/libs/*.jar
       - scape-subject-service/build/libs/*.jar
+      - scape-degree-service/build/libs/*.jar
 
 docker-build:
   stage: package
