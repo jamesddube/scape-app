@@ -36,15 +36,19 @@ docker-build:
     - cd ../scape-subject-service
     - docker build -t $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA
+    - cd ../scape-degree-service
+    - docker build -t $CI_REGISTRY_DEGREE_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_DEGREE_IMAGE:$CI_COMMIT_SHORT_SHA
 
 review:
   stage: review
   script:
     - docker run -d -p 4000:4000 $CI_REGISTRY_CORE_IMAGE:$CI_COMMIT_SHORT_SHA
     - docker run -d -p 4001:4001 $CI_REGISTRY_SUBJECT_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker run -d -p 4002:4002 $CI_REGISTRY_DEGREE_IMAGE:$CI_COMMIT_SHORT_SHA
   environment:
     name: review/$CI_BUILD_REF_NAME
     url: http://localhost:4000
   when: manual
   only:
-    - branches
+    - master
